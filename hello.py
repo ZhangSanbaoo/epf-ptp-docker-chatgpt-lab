@@ -11,6 +11,22 @@ openai.api_key = os.environ.get('OPENAI_KEY')
 def index():
     return "<h1>Hello, World!</h1>"
 
+@app.route('/code')
+def code():
+    args = request.args
+    coding_language = args.get("coding_language")
+    code_request = args.get("code_request")
+    
+    message = f"Write {code_request} in {coding_language}."
+    print(message)
+    
+    completion = openai.ChatCompletion.create(
+        model = "gpt-3.5-turbo",
+        messages = [{"role": "user", "content": message}]
+    )
+    return completion['choices'][0]['message']['content']
+
+
 @app.route('/chatgpt')
 def chatgpt():
     args = request.args
